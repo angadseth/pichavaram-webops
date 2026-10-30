@@ -451,6 +451,7 @@ const Scene = (() => {
   const ray = new THREE.Raycaster(), plane = new THREE.Plane(v(0, 1, 0), 0), hit = new THREE.Vector3();
   function tapWater(e) {
     ray.setFromCamera({ x: e.clientX / innerWidth * 2 - 1, y: -(e.clientY / innerHeight) * 2 + 1 }, camera);
+    plane.constant = -world.position.y;
     if (!ray.ray.intersectPlane(plane, hit)) return;
     ripple(world.worldToLocal(hit.clone()), 1.2);
     energy = Math.min(energy + .5, 1.5);
@@ -462,12 +463,13 @@ const Scene = (() => {
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     camera.position.set(0, wide ? 3.4 : 4, wide ? 17 : 19);
-    lookY = wide ? .7 : -1.4;
+    lookY = wide ? .9 : -1.2;
     camera.lookAt(0, lookY, 0);
     camera.updateProjectionMatrix();
     // On wide screens the tree sits in the left half, beside the card.
     const halfW = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.position.z * camera.aspect;
-    world.position.set(wide ? -halfW * .5 : 0, 0, 0);
+    world.position.set(wide ? -halfW * .5 : 0, wide ? -.4 : 0, 0);
+    world.scale.setScalar(wide ? .74 : .8);
   }
   addEventListener("resize", resize);
   resize();
