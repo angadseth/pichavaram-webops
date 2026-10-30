@@ -2,7 +2,7 @@
 // (apps-script/Code.gs). It writes each response to the "Web Ops Recruitment 2026" Sheet.
 // Paste the deployment's /exec URL into formAction.
 window.WEBOPS_CONFIG = {
-  formAction: "",
+  formAction: "https://script.google.com/macros/s/AKfycbwVD2TIRQQsj3ONnUEitNPSOoQge5WV5zbZPaflWPQI2cRttVMApwroPkzl8brFCWKe/exec",
   entries: {
     name: "name",
     email: "email",
