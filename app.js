@@ -462,7 +462,7 @@ const Scene = (() => {
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     camera.position.set(0, wide ? 3.4 : 4, wide ? 17 : 19);
-    lookY = wide ? 1.9 : -1.4;
+    lookY = wide ? .7 : -1.4;
     camera.lookAt(0, lookY, 0);
     camera.updateProjectionMatrix();
     // On wide screens the tree sits in the left half, beside the card.
