@@ -456,16 +456,18 @@ const Scene = (() => {
     energy = Math.min(energy + .5, 1.5);
   }
 
+  let lookY = 1.9;
   function resize() {
     const w = innerWidth, h = innerHeight, wide = w > 980;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
-    camera.position.set(0, wide ? 3.2 : 4, wide ? 15 : 18);
-    camera.lookAt(0, wide ? 1.4 : -1.2, 0);
+    camera.position.set(0, wide ? 3.4 : 4, wide ? 17 : 19);
+    lookY = wide ? 1.9 : -1.4;
+    camera.lookAt(0, lookY, 0);
     camera.updateProjectionMatrix();
     // On wide screens the tree sits in the left half, beside the card.
     const halfW = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.position.z * camera.aspect;
-    world.position.set(wide ? -halfW * .42 : 0, 0, 0);
+    world.position.set(wide ? -halfW * .5 : 0, 0, 0);
   }
   addEventListener("resize", resize);
   resize();
@@ -508,6 +510,7 @@ const Scene = (() => {
       if (b.position.x > 12) b.position.x = -12;
     }
     camera.position.x += (pointer.x * 1.2 - camera.position.x) * .03;
+    camera.lookAt(camera.position.x * .6, lookY, 0);
     renderer.render(scene, camera);
     requestAnimationFrame(tick);
   })();
