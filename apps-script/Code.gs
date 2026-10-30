@@ -14,8 +14,8 @@ const SITE = "https://angadseth.github.io/pichavaram-webops/";
 const TEST_TO = "24f2004141@ds.study.iitm.ac.in";
 const SUBJECT = "Pichavaram Web Ops is hiring. Show us what you've built.";
 const SENDER_NAME = "Angad Jangir · Pichavaram Web Ops";
-const FIELDS = ["name", "email", "level", "skills", "work", "proud", "hours", "phone", "extra"];
-const HEADERS = ["Submitted at", "Name", "Email", "Level", "Skills", "Work / links", "Proud of", "Hours / week", "WhatsApp", "Anything else"];
+const FIELDS = ["name", "email", "degree", "level", "skills", "work", "proud", "linkedin", "hours", "phone", "extra"];
+const HEADERS = ["Submitted at", "Name", "Email", "Degree", "Level", "Skills", "Work / links", "Proud of", "LinkedIn", "Hours / week", "WhatsApp", "Anything else"];
 const BATCH = 90;   // BCC recipients per mail
 
 function setup() {
@@ -32,8 +32,8 @@ function setup() {
     .setFontWeight("bold").setBackground("#1f5c43").setFontColor("#ffffff");
   sh.setFrozenRows(1);
   sh.setColumnWidths(1, HEADERS.length, 180);
-  sh.setColumnWidth(6, 320);
   sh.setColumnWidth(7, 320);
+  sh.setColumnWidth(8, 320);
   if (!ss.getSheetByName("Recipients")) ss.insertSheet("Recipients").getRange("A1").setValue("email");
   Logger.log("Sheet: " + ss.getUrl());
 }
@@ -46,7 +46,7 @@ function sheet_(name) {
 function doPost(e) {
   const p = (e && e.parameter) || {};
   const email = String(p.email || "").trim().toLowerCase();
-  if (!/@(ds|es)\.study\.iitm\.ac\.in$/.test(email)) return json_({ ok: false, error: "email" });
+  if (!/@[a-z]{2}\.study\.iitm\.ac\.in$/.test(email)) return json_({ ok: false, error: "email" });
   const lock = LockService.getScriptLock();
   lock.waitLock(20000);
   try {

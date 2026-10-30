@@ -3,34 +3,36 @@
 
 const QUESTIONS = [
   { id: "name", type: "text", title: "First things first. <i>Your name?</i>", placeholder: "Full name", autocomplete: "name", required: true },
-  { id: "email", type: "email", title: "Your IITM email.", hint: "The ds.study.iitm.ac.in one. That's how we'll find you.", placeholder: "21f1000000@ds.study.iitm.ac.in", autocomplete: "email", required: true },
-  { id: "level", type: "single", title: "Where are you in the degree?", options: ["Foundation", "Diploma", "BSc", "BS"], required: true },
+  { id: "email", type: "email", title: "Your IITM student email.", hint: "The one that ends in study.iitm.ac.in. That's how we'll find you.", placeholder: "21f1000000@ds.study.iitm.ac.in", autocomplete: "email", required: true },
+  { id: "degree", type: "single", title: "Which BS degree are you doing?", options: ["Data Science and Programming", "Electronic Systems", "Aerospace", "Management"], required: true },
+  { id: "level", type: "single", title: "What level are you at?", options: ["Foundation", "Diploma", "BS Degree"], required: true },
   {
     id: "skills", type: "multi", title: "What can you <i>actually</i> do?",
     hint: "Tick what you can do today, not what you plan to learn. Pick as many as are true.",
     options: [
-      ["Frontend", "HTML, CSS, JS, React"],
-      ["Backend & APIs", "Node, Python, databases"],
-      ["UI / UX design", "Figma, layouts, type"],
-      ["Automation", "Scripts, bots, Apps Script"],
-      ["Hosting & deploys", "Vercel, GitHub Pages, domains"],
-      ["Sheets & data", "Formulas, dashboards"],
-      ["Graphics & video", "Posters, reels, motion"]
+      ["Website & UI design", "Figma, layouts, how the site looks"],
+      ["Coding & backend", "Server upkeep, scripts, deploys"],
+      ["APIs", "Integrations, multilingual APIs"],
+      ["Graphics & video", "Posters, reels, motion"],
+      ["Content & strategy", "Writing, planning what goes out"],
+      ["Social media", "Running the house handles"],
+      ["PR & outreach", "WhatsApp marketing, spreading the word"]
     ],
     required: true
   },
   {
     id: "work", type: "long", title: "Show us your work.",
-    hint: "Done any projects before? Drop the links straight away: GitHub, live sites, Figma, Drive, anything. One per line. Nothing yet? Tell us what you'd build first.",
+    hint: "Done any projects before? Drop the links straight away: GitHub, live sites, Figma, Drive, YouTube, anything. One per line. Nothing yet? Tell us what you'd build first.",
     placeholder: "https://github.com/…\nhttps://your-site.vercel.app", required: true, minLen: 10
   },
-  { id: "proud", type: "long", title: "The one thing you've built that you're <i>proud</i> of.", hint: "Two or three lines. What it was, what you did on it.", placeholder: "Built a… / Fixed a… / Shipped a…", required: true, minLen: 15 },
+  { id: "proud", type: "long", title: "The one thing you've done that you're <i>proud</i> of.", hint: "Two or three lines. What it was, what you did on it.", placeholder: "Built a… / Fixed a… / Shipped a…", required: true, minLen: 15 },
+  { id: "linkedin", type: "text", title: "Your LinkedIn.", placeholder: "linkedin.com/in/your-name", autocomplete: "url", required: true },
   { id: "hours", type: "range", title: "Hours a week you can <i>really</i> give.", hint: "Be honest. Five steady hours beat twenty promised ones.", min: 2, max: 20, value: 6, required: true },
-  { id: "phone", type: "tel", title: "WhatsApp number.", hint: "Only for adding you to the team group if you're picked.", placeholder: "98xxxxxx10", autocomplete: "tel", required: true },
+  { id: "phone", type: "tel", title: "WhatsApp number.", hint: "So we can reach you if you're shortlisted.", placeholder: "98xxxxxx10", autocomplete: "tel", required: true },
   { id: "extra", type: "long", title: "Anything else we should know?", hint: "Optional. Skip it if there's nothing.", placeholder: "Ideas for the house site, tools you love, anything.", required: false }
 ];
 
-const LABELS = { name: "Name", email: "Email", level: "Level", skills: "Skills", work: "Work", proud: "Proud of", hours: "Hours / week", phone: "WhatsApp", extra: "Anything else" };
+const LABELS = { name: "Name", email: "Email", degree: "Degree", level: "Level", skills: "Skills", work: "Work", proud: "Proud of", linkedin: "LinkedIn", hours: "Hours / week", phone: "WhatsApp", extra: "Anything else" };
 const answers = { hours: 6, skills: [] };
 const card = document.getElementById("card");
 const bar = document.getElementById("bar");
@@ -51,7 +53,7 @@ function intro() {
     <p class="qnum"><b>Recruitment</b><em>· Web Ops team</em></p>
     <h1>We need people<br>who <span class="u">build</span> <i>things.</i></h1>
     <p class="lead">Pichavaram House is picking people for Web Ops: the house site, tools, automations, the works. No cover letter, no long intro. Show us what you've made.</p>
-    <ul class="facts"><li>9 questions</li><li>~3 minutes</li><li>Last date · 15 November</li></ul>
+    <ul class="facts"><li>11 questions</li><li>~3 minutes</li><li>Last date · 15 November</li><li>IITM certificate if selected</li></ul>
     <p class="hint">Every answer grows the mangrove a little more. Finish it.</p>
     <div class="actions"><button type="button" class="btn gold" data-go="next">Let's go ${arrow}</button><span class="press">press <kbd>Enter ↵</kbd></span></div>
   </section>`;
@@ -161,7 +163,8 @@ function validate(q) {
   if (!q.required && empty) return "";
   if (empty) return q.type === "multi" ? "Pick at least one." : q.type === "single" ? "Pick one." : "This one's needed.";
   const s = String(v).trim();
-  if (q.id === "email" && !/^[^\s@]+@(ds|es)\.study\.iitm\.ac\.in$/i.test(s)) return "Use your IITM student email (…@ds.study.iitm.ac.in).";
+  if (q.id === "email" && !/^[^\s@]+@[a-z]{2}\.study\.iitm\.ac\.in$/i.test(s)) return "Use your IITM student email (…study.iitm.ac.in).";
+  if (q.id === "linkedin" && !/linkedin\.com\//i.test(s)) return "Paste your LinkedIn profile link.";
   if (q.id === "phone" && s.replace(/\D/g, "").length < 10) return "That doesn't look like a full number.";
   if (q.minLen && s.length < q.minLen) return "Give us a little more than that.";
   return "";

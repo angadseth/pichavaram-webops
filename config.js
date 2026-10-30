@@ -6,10 +6,12 @@ window.WEBOPS_CONFIG = {
   entries: {
     name: "name",
     email: "email",
+    degree: "degree",
     level: "level",
     skills: "skills",
     work: "work",
     proud: "proud",
+    linkedin: "linkedin",
     hours: "hours",
     phone: "phone",
     extra: "extra"
