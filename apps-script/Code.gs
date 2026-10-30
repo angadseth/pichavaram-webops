@@ -12,6 +12,7 @@
 
 const SITE = "https://angadseth.github.io/pichavaram-webops/";
 const TEST_TO = "24f2004141@ds.study.iitm.ac.in";
+const HOUSE_TO = "pichavaram@ds.study.iitm.ac.in";
 const SUBJECT = "Pichavaram Web Ops is hiring. Show us what you've built.";
 const SENDER_NAME = "Angad Jangir · Pichavaram Web Ops";
 const FIELDS = ["name", "email", "degree", "level", "skills", "work", "proud", "linkedin", "hours", "phone", "extra"];
@@ -91,6 +92,12 @@ function plainBody_() {
 function sendTest() {
   GmailApp.sendEmail(TEST_TO, "[Test] " + SUBJECT, plainBody_(), { htmlBody: mailBody_(), name: SENDER_NAME });
   Logger.log("Test mail sent to " + TEST_TO + ". Quota left today: " + MailApp.getRemainingDailyQuota());
+}
+
+// Leaves the final mail in Drafts, addressed to the whole house. Angad presses Send himself.
+function makeDraft() {
+  GmailApp.createDraft(HOUSE_TO, SUBJECT, plainBody_(), { htmlBody: mailBody_(), name: SENDER_NAME });
+  Logger.log("Draft ready for " + HOUSE_TO);
 }
 
 function sendAll() {
