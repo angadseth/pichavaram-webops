@@ -43,6 +43,7 @@ const total = QUESTIONS.length;
 let current = 0;
 let sending = false;
 let booted = false;
+let submitted = false;
 
 /* ---------- Build slides ---------- */
 function intro() {
@@ -178,7 +179,7 @@ function clearErr(slide) { const el = slide.querySelector(".err"); if (el) el.te
 /* ---------- Navigation ---------- */
 function go(to) {
   if (sending) return;
-  to = Math.max(0, Math.min(to, current === DONE ? DONE : REVIEW));
+  to = Math.max(0, Math.min(to, submitted ? DONE : REVIEW));
   if (to > current && current >= 1 && current <= LAST_Q) {
     const q = QUESTIONS[current - 1];
     const msg = validate(q);
@@ -267,6 +268,7 @@ async function submit() {
     // Google Forms sends no CORS headers, so the reply is opaque; a network failure still throws.
     await fetch(cfg.formAction, { method: "POST", mode: "no-cors", body });
     sending = false;
+    submitted = true;
     document.getElementById("done-name").textContent = String(answers.name).trim().split(/\s+/)[0];
     Scene.burst();
     go(DONE);
